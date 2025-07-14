@@ -7,14 +7,18 @@ import com.example.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+
+import java.security.Principal;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Override
     public void register(UserRegisterDto dto) {
         if(!dto.getPassword().equals(dto.getConfirmPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
@@ -28,5 +32,12 @@ public class UserServiceImpl{
                 .role(Role.ROLE_USER)
                 .build();
         userRepository.save(user);
+    }
+
+    @Override
+    public void forwardUsername(Model model, Principal principal) {
+        if (principal != null) {
+            model.addAttribute("username", principal.getName());
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.example.board.controller;
 
 import com.example.board.dto.UserRegisterDto;
-import com.example.board.service.UserServiceImpl;
+import com.example.board.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
+
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -28,23 +30,19 @@ public class UserController {
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
-            return "auth/login";
+            return "auth/register";
         }
     }
 
     @GetMapping("/login")
-    public String showLoginForm() {
+    public String loginForm() {
         return "auth/login";
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard() {
+    @GetMapping("/")
+    public String home(Model model, Principal principal) {
+        userService.forwardUsername(model, principal);
         System.out.println("home 컨트롤러 진입");
         return "home";
-    }
-
-    @GetMapping("/")
-    public String redirectToHome() {
-        return "redirect:/dashboard";
     }
 }
