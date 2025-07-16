@@ -39,10 +39,4 @@ public class UserController {
         return "auth/login";
     }
 
-    @GetMapping("/")
-    public String home(Model model, Principal principal) {
-        userService.forwardUsername(model, principal);
-        System.out.println("home 컨트롤러 진입");
-        return "home";
-    }
 }

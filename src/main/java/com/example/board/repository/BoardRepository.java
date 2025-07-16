@@ -9,4 +9,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     
     // hidden 처리가 안된 게시글만 조회
     List<Board> findByHiddenFalse();
+
 }
