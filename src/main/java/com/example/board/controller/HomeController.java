@@ -1,6 +1,6 @@
 package com.example.board.controller;
 
-import com.example.board.dto.BoardAllListResDto;
+import com.example.board.dto.BoardResDto;
 import com.example.board.service.BoardService;
 import com.example.board.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class HomeController {
         userService.forwardUsername(model, principal);
 
         // 게시글 목록도 모델에 전달
-        List<BoardAllListResDto> boards = boardService.findAllBoard();
+        List<BoardResDto> boards = boardService.findAllBoard();
         model.addAttribute("boardList", boards);
 
         return "home";

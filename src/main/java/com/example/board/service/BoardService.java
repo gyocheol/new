@@ -1,9 +1,12 @@
 package com.example.board.service;
 
-import com.example.board.dto.BoardAllListResDto;
+import com.example.board.dto.BoardResDto;
+import com.example.board.dto.BoardUpdateReqDto;
 import com.example.board.dto.BoardWriteDto;
 import com.example.board.entity.Board;
+import org.springframework.ui.Model;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface BoardService {
@@ -13,7 +16,7 @@ public interface BoardService {
      * Board를 ResDto로 처리
      * @return 게시글 리스트
      */
-    List<BoardAllListResDto> findAllBoard();
+    List<BoardResDto> findAllBoard();
 
     /**
      * 게시글 hidden 처리
@@ -29,13 +32,23 @@ public interface BoardService {
 
     /**
      * 게시글 삭제
-     * @param userName
+     * @param id
+     * @param username
      */
-    void deleteBoard(String userName);
+    void deleteBoard(Long id, String username);
 
     /**
      * 게시글 수정
-     * @param userName
+     * @param id
+     * @param username
+     * @param dto
      */
-    void updateBoard(String userName);
+    BoardResDto updateBoard(Long id, String username, BoardUpdateReqDto dto);
+
+    /**
+     * 게시글 한 개 조회
+     * @param id
+     * @return
+     */
+    Board getBoard(Long id);
 }

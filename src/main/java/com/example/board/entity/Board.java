@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -33,5 +35,9 @@ public class Board {
         this.content = content;
         this.createdAt = createdAt;
         this.author = author;
+    }
+
+    public Date getCreatedAtDate() {
+        return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

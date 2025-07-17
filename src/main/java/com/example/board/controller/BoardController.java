@@ -5,22 +5,25 @@ import com.example.board.entity.Board;
 import com.example.board.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping
 @RequiredArgsConstructor
 public class BoardController {
+
     private final BoardService boardService;
 
+    /**
+     * 새 게시글 작성
+     * @param dto
+     * @param principal
+     * @return home.jsp
+     */
     @PostMapping("/write")
     public String writeBoard(@Valid @ModelAttribute BoardWriteDto dto, Principal principal) {
         if (principal == null) {
@@ -32,9 +35,40 @@ public class BoardController {
         return "redirect:/";
     }
 
+    /**
+     * 게시글 작성 form
+     * @return write-form.jsp
+     */
     @GetMapping("/board/write-form")
     public String showWriteForm() {
         return "board/write-form";
+    }
+
+    /**
+     * 게시글 삭제
+     * @param id
+     * @param principal
+     * @return home.jsp
+     */
+    @DeleteMapping("/board/delete")
+    public String deleteBoard(@RequestParam Long id, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        boardService.deleteBoard(id, principal.getName());
+        return "redirect:/";
+    }
+
+    @GetMapping("/board/{id}")
+    public String viewBoard(@PathVariable Long id, Model model, Principal principal) {
+        String loginUsername = (principal != null) ? principal.getName() : "";
+
+        Board board = boardService.getBoard(id);
+
+        model.addAttribute("board", board);
+        model.addAttribute("loginUsername", loginUsername);
+
+        return "board/view";
     }
 
 }
