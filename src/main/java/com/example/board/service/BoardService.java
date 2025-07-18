@@ -50,5 +50,5 @@ public interface BoardService {
      * @param id
      * @return
      */
-    Board getBoard(Long id);
+    void getBoard(Long id, Model model, Principal principal);
 }

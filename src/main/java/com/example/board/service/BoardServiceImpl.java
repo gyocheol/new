@@ -84,10 +84,14 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board getBoard(Long id) {
+    public void getBoard(Long id, Model model, Principal principal) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NewCustomException("게시글이 없습니다."));
-        return board;
+
+        String loginUsername = (principal != null) ? principal.getName() : "";
+
+        model.addAttribute("board", board);
+        model.addAttribute("loginUsername", loginUsername);
     }
 
     /**

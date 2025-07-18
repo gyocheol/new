@@ -59,16 +59,16 @@ public class BoardController {
         return "redirect:/";
     }
 
+    /**
+     *
+     * @param id
+     * @param model
+     * @param principal
+     * @return
+     */
     @GetMapping("/board/{id}")
     public String viewBoard(@PathVariable Long id, Model model, Principal principal) {
-        String loginUsername = (principal != null) ? principal.getName() : "";
-
-        Board board = boardService.getBoard(id);
-
-        model.addAttribute("board", board);
-        model.addAttribute("loginUsername", loginUsername);
-
+        boardService.getBoard(id, model, principal);
         return "board/view";
     }
-
 }
