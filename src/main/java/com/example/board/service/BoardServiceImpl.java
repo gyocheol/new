@@ -63,7 +63,21 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardResDto updateBoard(Long id, String username, BoardUpdateReqDto dto) {
+    public void getBoardForUpdate(Long id, Model model, Principal principal) {
+        Board board = validationBoard(id, principal.getName());
+        // 프론트 전달용 dto
+        BoardResDto boardResDto = BoardResDto.builder()
+                .title(board.getTitle())
+                .content(board.getContent())
+                .author(board.getAuthor().getUsername())
+                .createdAt(board.getCreatedAt())
+                .build();
+        model.addAttribute("board", boardResDto);
+        model.addAttribute("id", id);
+    }
+
+    @Override
+    public void updateBoard(Long id, String username, BoardUpdateReqDto dto) {
         Board board = validationBoard(id, username);
 
         // board update
@@ -72,15 +86,6 @@ public class BoardServiceImpl implements BoardService {
         board.setCreatedAt(LocalDateTime.now());
 
         boardRepository.save(board);
-
-        // 프론트 전달용 dto
-        BoardResDto boardResDto = BoardResDto.builder()
-                .title(board.getTitle())
-                .content(board.getContent())
-                .author(board.getAuthor().getUsername())
-                .createdAt(board.getCreatedAt())
-                .build();
-        return boardResDto;
     }
 
     @Override

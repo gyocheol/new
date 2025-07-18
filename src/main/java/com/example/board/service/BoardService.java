@@ -38,12 +38,20 @@ public interface BoardService {
     void deleteBoard(Long id, String username);
 
     /**
+     * 수정을 위한 이전 게시글 데이터 전송
+     * @param id
+     * @param username
+     * @return
+     */
+    void getBoardForUpdate(Long id, Model model, Principal principal);
+
+    /**
      * 게시글 수정
      * @param id
      * @param username
      * @param dto
      */
-    BoardResDto updateBoard(Long id, String username, BoardUpdateReqDto dto);
+    void updateBoard(Long id, String username, BoardUpdateReqDto dto);
 
     /**
      * 게시글 한 개 조회

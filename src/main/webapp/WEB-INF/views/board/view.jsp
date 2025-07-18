@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
@@ -13,7 +13,7 @@
         }
 
         .container {
-            width: 60%; /* 전체 화면의 60% = 5등분 중 가운데 3 */
+            width: 60%;
             margin: 40px auto;
             background-color: white;
             padding: 30px;
@@ -39,42 +39,58 @@
             margin-bottom: 30px;
         }
 
-        .buttons {
-            text-align: right;
-            margin-bottom: 40px;
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
         }
 
-        .buttons form {
-            display: inline-block;
-            margin-left: 10px;
+        .button-left,
+        .button-right {
+            display: flex;
+            gap: 10px;
         }
 
-        .buttons button {
+        .button-left button,
+        .button-right button {
             padding: 8px 16px;
             font-size: 14px;
-            background-color: #007bff;
-            color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
         }
 
-        .buttons button:hover {
+        .button-left button {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .button-left button:hover {
+            background-color: #5a6268;
+        }
+
+        .button-right button {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .button-right button:hover {
             background-color: #0056b3;
         }
 
-        .comments {
-            margin-top: 40px;
+        .delete-button {
+            background-color: #dc3545 !important;
         }
 
-        .comments h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
+        .delete-button:hover {
+            background-color: #b52a37 !important;
         }
 
+        /* 댓글 테이블 스타일 (주석 처리된 부분에 적용됨) */
         .comment-table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 30px;
         }
 
         .comment-table th,
@@ -99,24 +115,33 @@
     </div>
 
     <div class="content">
-        ${board.content}
+        <c:out value="${board.content}" escapeXml="true"/>
     </div>
 
-    <!-- 수정/삭제 버튼 (작성자와 로그인 유저가 같을 경우에만) -->
-    <c:if test="${loginUsername == board.author.username}">
-        <div class="buttons">
-            <form action="/board/edit/${board.id}" method="get">
-                <button type="submit">수정</button>
-            </form>
-            <form action="/board/delete" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                <input type="hidden" name="_method" value="delete"/>
-                <input type="hidden" name="id" value="${board.id}"/>
-                <button type="submit">삭제</button>
+    <div class="button-group">
+        <!-- 좌측: 목록 버튼 -->
+        <div class="button-left">
+            <form action="/" method="get">
+                <button type="submit">목록</button>
             </form>
         </div>
-    </c:if>
 
-    <!-- 댓글 영역 -->
+        <!-- 우측: 수정/삭제 버튼 (작성자 본인만 노출) -->
+        <c:if test="${loginUsername == board.author.username}">
+            <div class="button-right">
+                <form action="/board/edit/${board.id}" method="get">
+                    <button type="submit">수정</button>
+                </form>
+                <form action="/board/delete" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <input type="hidden" name="id" value="${board.id}"/>
+                    <button type="submit" class="delete-button">삭제</button>
+                </form>
+            </div>
+        </c:if>
+    </div>
+
+    <%-- 댓글 영역 주석 처리됨
     <div class="comments">
         <h3>댓글</h3>
         <table class="comment-table">
@@ -129,12 +154,12 @@
             </thead>
             <tbody>
             <c:choose>
-                <c:when test="${not empty comments}">
-                    <c:forEach var="comment" items="${comments}">
+                <c:when test="${not empty board.commentList}">
+                    <c:forEach var="comment" items="${board.commentList}">
                         <tr>
-                            <td>${comment.author}</td>
-                            <td>${comment.content}</td>
-                            <td><fmt:formatDate value="${comment.createdAt}" pattern="yy-MM-dd HH:mm"/></td>
+                            <td>${comment.author.username}</td>
+                            <td><c:out value="${comment.content}" escapeXml="true"/></td>
+                            <td><fmt:formatDate value="${comment.createdAt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                         </tr>
                     </c:forEach>
                 </c:when>
@@ -147,6 +172,7 @@
             </tbody>
         </table>
     </div>
+    --%>
 </div>
 </body>
 </html>

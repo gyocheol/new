@@ -1,7 +1,8 @@
 package com.example.board.controller;
 
+import com.example.board.dto.BoardResDto;
+import com.example.board.dto.BoardUpdateReqDto;
 import com.example.board.dto.BoardWriteDto;
-import com.example.board.entity.Board;
 import com.example.board.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -60,15 +61,40 @@ public class BoardController {
     }
 
     /**
-     *
+     * 게시글 한 개 조회
      * @param id
      * @param model
      * @param principal
-     * @return
+     * @return view.jsp
      */
     @GetMapping("/board/{id}")
     public String viewBoard(@PathVariable Long id, Model model, Principal principal) {
         boardService.getBoard(id, model, principal);
         return "board/view";
+    }
+
+    /**
+     * 게시글 수정 전 게시글 내용 Get
+     * @param id
+     * @param model
+     * @param principal
+     * @return edit-form.jsp
+     */
+    @GetMapping("/board/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        boardService.getBoardForUpdate(id, model, principal);
+        return "board/edit-form";
+    }
+
+    @PostMapping("/board/edit")
+    public String updateBoard(@RequestParam Long id, @Valid @ModelAttribute BoardUpdateReqDto dto, Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        boardService.updateBoard(id, principal.getName(), dto);
+        return "redirect:/board/" + id;
     }
 }
