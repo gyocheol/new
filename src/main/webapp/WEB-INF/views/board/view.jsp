@@ -35,7 +35,8 @@
 
         .content {
             font-size: 16px;
-            white-space: pre-wrap;
+            white-space: normal;
+            word-break: break-word;
             margin-bottom: 30px;
         }
 
@@ -114,9 +115,26 @@
         작성일: <fmt:formatDate value="${board.createdAtDate}" pattern="yy-MM-dd HH:mm"/>
     </div>
 
-    <div class="content">
-        <c:out value="${board.content}" escapeXml="true"/>
+    <div class="content" id="contentBox">
+        <c:out value="${board.content}" escapeXml="true" />
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+                const el = document.getElementById('contentBox');
+                const text = el.textContent;
+
+                // 각 줄 앞의 공백 제거 (trimStart), HTML 특수문자 이스케이프
+                const lines = text.split('\n').map(line =>
+                    line.trimStart()
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                );
+
+                el.innerHTML = lines.join('<br/>');
+            });
+    </script>
 
     <div class="button-group">
         <!-- 좌측: 목록 버튼 -->
