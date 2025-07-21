@@ -168,7 +168,7 @@
             <c:forEach var="board" items="${boardList}">
                 <tr>
                     <td class="title-cell">
-                        <a href="/board/${board.id}" style="text-decoration:none; color:#007bff;">
+                        <a href="/board/view/${board.id}" style="text-decoration:none; color:#007bff;">
                             ${board.title}
                         </a>
                     </td>

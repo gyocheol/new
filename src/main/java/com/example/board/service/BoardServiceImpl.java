@@ -46,14 +46,15 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void createBoard(BoardWriteDto dto) {
+    public Long createBoard(BoardWriteDto dto) {
         Board board = Board.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .createdAt(LocalDateTime.now())
                 .author(userRepository.findByUsername(dto.getAuthorName()).orElseThrow())
                 .build();
-        boardRepository.save(board);
+        Board saved_board = boardRepository.save(board);
+        return saved_board.getId();
     }
 
     @Override

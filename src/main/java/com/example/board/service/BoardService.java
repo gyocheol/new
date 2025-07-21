@@ -19,7 +19,7 @@ public interface BoardService {
     List<BoardResDto> findAllBoard();
 
     /**
-     * 게시글 hidden 처리
+     * 게시글 hidden 처리 TODO : 관리자 설정 이후 구현하기
      * @param id
      */
     void hideBoard(Long id);
@@ -28,7 +28,7 @@ public interface BoardService {
      * 게시글 생성
      * @param dto
      */
-    void createBoard(BoardWriteDto dto);
+    Long createBoard(BoardWriteDto dto);
 
     /**
      * 게시글 삭제
@@ -40,7 +40,8 @@ public interface BoardService {
     /**
      * 수정을 위한 이전 게시글 데이터 전송
      * @param id
-     * @param username
+     * @param model
+     * @param principal
      * @return
      */
     void getBoardForUpdate(Long id, Model model, Principal principal);

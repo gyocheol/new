@@ -69,5 +69,15 @@
         </div>
     </form>
 </div>
+<script>
+    // 사용자가 게시글을 작성하고 /write 요청 후 다른 페이지로 리다이렉트된 경우,
+    // 이 작성 페이지를 뒤로가기로 못 오게 만듬
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted || (window.performance && performance.navigation.type === 2)) {
+            // 뒤로가기로 접근한 경우 목록 페이지로 이동
+            window.location.replace('/');
+        }
+    });
+</script>
 </body>
 </html>

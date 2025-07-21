@@ -32,8 +32,8 @@ public class BoardController {
         }
         dto.setAuthorName(principal.getName());  // 로그인한 사용자 이름 설정
 
-        boardService.createBoard(dto);
-        return "redirect:/";
+        Long id = boardService.createBoard(dto);
+        return "redirect:/board/view/" + id;
     }
 
     /**
@@ -67,7 +67,7 @@ public class BoardController {
      * @param principal
      * @return view.jsp
      */
-    @GetMapping("/board/{id}")
+    @GetMapping("/board/view/{id}")
     public String viewBoard(@PathVariable Long id, Model model, Principal principal) {
         boardService.getBoard(id, model, principal);
         return "board/view";
@@ -89,12 +89,19 @@ public class BoardController {
         return "board/edit-form";
     }
 
+    /**
+     * 게시글 수정
+     * @param id
+     * @param dto
+     * @param principal
+     * @return
+     */
     @PostMapping("/board/edit")
     public String updateBoard(@RequestParam Long id, @Valid @ModelAttribute BoardUpdateReqDto dto, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }
         boardService.updateBoard(id, principal.getName(), dto);
-        return "redirect:/board/" + id;
+        return "redirect:/board/view/" + id;
     }
 }
