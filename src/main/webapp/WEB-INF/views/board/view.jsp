@@ -158,39 +158,8 @@
             </div>
         </c:if>
     </div>
+    <jsp:include page="/WEB-INF/views/comment/comment.jsp" />
 
-    <%-- 댓글 영역 주석 처리됨
-    <div class="comments">
-        <h3>댓글</h3>
-        <table class="comment-table">
-            <thead>
-                <tr>
-                    <th>작성자</th>
-                    <th>내용</th>
-                    <th>작성일</th>
-                </tr>
-            </thead>
-            <tbody>
-            <c:choose>
-                <c:when test="${not empty board.commentList}">
-                    <c:forEach var="comment" items="${board.commentList}">
-                        <tr>
-                            <td>${comment.author.username}</td>
-                            <td><c:out value="${comment.content}" escapeXml="true"/></td>
-                            <td><fmt:formatDate value="${comment.createdAt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-                        </tr>
-                    </c:forEach>
-                </c:when>
-                <c:otherwise>
-                    <tr>
-                        <td colspan="3" style="text-align: center;">등록된 댓글이 없습니다.</td>
-                    </tr>
-                </c:otherwise>
-            </c:choose>
-            </tbody>
-        </table>
-    </div>
-    --%>
 </div>
 </body>
 </html>

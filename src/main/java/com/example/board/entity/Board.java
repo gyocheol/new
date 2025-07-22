@@ -25,7 +25,7 @@ public class Board {
     private boolean hidden = false;
     @ManyToOne
     private User author;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
