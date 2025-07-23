@@ -86,25 +86,6 @@
         .delete-button:hover {
             background-color: #b52a37 !important;
         }
-
-        /* 댓글 테이블 스타일 (주석 처리된 부분에 적용됨) */
-        .comment-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 30px;
-        }
-
-        .comment-table th,
-        .comment-table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            font-size: 14px;
-        }
-
-        .comment-table th {
-            background-color: #f2f2f2;
-            text-align: left;
-        }
     </style>
 </head>
 <body>
@@ -121,30 +102,27 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-                const el = document.getElementById('contentBox');
-                const text = el.textContent;
+            const el = document.getElementById('contentBox');
+            const text = el.textContent;
 
-                // 각 줄 앞의 공백 제거 (trimStart), HTML 특수문자 이스케이프
-                const lines = text.split('\n').map(line =>
-                    line.trimStart()
-                        .replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                );
+            const lines = text.split('\n').map(line =>
+                line.trimStart()
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+            );
 
-                el.innerHTML = lines.join('<br/>');
-            });
+            el.innerHTML = lines.join('<br/>');
+        });
     </script>
 
     <div class="button-group">
-        <!-- 좌측: 목록 버튼 -->
         <div class="button-left">
             <form action="/" method="get">
                 <button type="submit">목록</button>
             </form>
         </div>
 
-        <!-- 우측: 수정/삭제 버튼 (작성자 본인만 노출) -->
         <c:if test="${loginUsername == board.author.username}">
             <div class="button-right">
                 <form action="/board/edit/${board.id}" method="get">
@@ -158,8 +136,9 @@
             </div>
         </c:if>
     </div>
-    <jsp:include page="/WEB-INF/views/comment/comment.jsp" />
 
+    <!-- 댓글 포함 영역 -->
+    <jsp:include page="/WEB-INF/views/comment/comment.jsp" />
 </div>
 </body>
 </html>

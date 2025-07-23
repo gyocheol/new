@@ -1,6 +1,7 @@
 package com.example.board.service;
 
 import com.example.board.dto.CommentReqDto;
+import com.example.board.dto.CommentResDto;
 import com.example.board.entity.Board;
 import com.example.board.entity.Comment;
 import com.example.board.entity.User;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +41,21 @@ public class CommentServiceImpl implements CommentService {
             comment.setParent(parent);
         }
         commentRepository.save(comment);
+    }
+
+    @Override
+    public List<CommentResDto> findAllComment(Long boardId) {
+        List<Comment> comments = commentRepository.findByBoardIdOrderByCreatedAtAsc(boardId);
+
+        return comments.stream()
+                .map(comment -> new CommentResDto(
+                        comment.getId(),
+                        comment.getContent(),
+                        comment.getAuthor().getUsername(),
+                        comment.isHidden(),
+                        comment.getParent(),
+                        comment.getCreatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 }
