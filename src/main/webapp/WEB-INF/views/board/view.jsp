@@ -227,7 +227,16 @@
                             <button class="reply-button" onclick="toggleReplyForm(${comment.id})">답글달기</button>
                         </c:if>
                     </div>
-                    <div class="comment-content">${comment.content}</div>
+                    <div class="comment-content">
+                        <c:choose>
+                            <c:when test="${comment.hidden}">
+                                <em style="color: #888;">관리자에 의해 숨김 처리된 댓글입니다.</em>
+                            </c:when>
+                            <c:otherwise>
+                                ${comment.content}
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
 
                     <!-- 대댓글 출력 -->
                     <c:forEach var="reply" items="${comments}">
@@ -236,7 +245,16 @@
                                 <div class="comment-meta">
                                     ${reply.author} · <fmt:formatDate value="${reply.createdAtDate}" pattern="yy-MM-dd HH:mm"/>
                                 </div>
-                                <div class="comment-content">${reply.content}</div>
+                                <div class="comment-content">
+                                <c:choose>
+                                    <c:when test="${reply.hidden}">
+                                        <em style="color: #888;">관리자에 의해 숨김 처리된 댓글입니다.</em>
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${reply.content}
+                                    </c:otherwise>
+                                </c:choose>
+                                </div>
                             </div>
                         </c:if>
                     </c:forEach>
