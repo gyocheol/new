@@ -97,7 +97,6 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new NewCustomException("게시글이 없습니다."));
 
         List<CommentResDto> comments = commentService.findAllComment(id);
-        System.out.print(comments);
 
         String loginUsername = (principal != null) ? principal.getName() : "";
 
