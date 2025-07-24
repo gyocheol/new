@@ -267,7 +267,7 @@
             </div>
         </c:if>
         <c:if test="${empty loginUsername}">
-            <p style="margin-top: 20px; color: #777;">댓글을 작성하려면 <a href="/login">로그인</a>이 필요합니다.</p>
+            <p style="margin-top: 20px; color: #777;">댓글을 작성하려면 <a href="/login?redirectURL=/board/view/${board.id}">로그인</a>이 필요합니다.</p>
         </c:if>
     </div>
     <!-- 댓글 영역 끝 -->

@@ -35,7 +35,15 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+//                        .defaultSuccessUrl("/", false)
+                        .successHandler((request, response, authentication) -> {
+                            String redirectURL = request.getParameter("redirectURL");
+                            if (redirectURL != null && !redirectURL.isBlank()) {
+                                response.sendRedirect(redirectURL);
+                            } else {
+                                response.sendRedirect("/");
+                            }
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
