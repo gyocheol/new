@@ -1,6 +1,5 @@
 package com.example.board.controller;
 
-import com.example.board.dto.BoardResDto;
 import com.example.board.dto.BoardUpdateReqDto;
 import com.example.board.dto.BoardWriteDto;
 import com.example.board.service.BoardService;
@@ -46,7 +45,7 @@ public class BoardController {
     }
 
     /**
-     * 게시글 삭제
+     * 게시글 삭제 TODO : 매핑 주소를 restful한 설계로 변경하기 / PathVariable로 id 받아오기!
      * @param id
      * @param principal
      * @return home.jsp
@@ -81,7 +80,7 @@ public class BoardController {
      * @return edit-form.jsp
      */
     @GetMapping("/board/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model, Principal principal) {
+    public String showBoardEditForm(@PathVariable Long id, Model model, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }
@@ -90,7 +89,7 @@ public class BoardController {
     }
 
     /**
-     * 게시글 수정
+     * 게시글 수정 TODO : 매핑 주소를 restful한 설계로 변경하기 / PathVariable로 id 받아오기!
      * @param id
      * @param dto
      * @param principal
