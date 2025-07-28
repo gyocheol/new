@@ -81,6 +81,6 @@ public class CommentController {
     public String showCommentEditForm(@PathVariable Long commentId, @RequestParam Long boardId, Model model, Principal principal) {
         commentService.getCommentForUpdate(commentId, model, principal);
         model.addAttribute("boardId", boardId);
-        return "comment/edit";
+        return "redirect:/board/view/" + boardId;
     }
 }
