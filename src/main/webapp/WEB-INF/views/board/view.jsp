@@ -1,10 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<%-- 줄바꿈 문자 변수로 선언 --%>
+<% pageContext.setAttribute("newline", "\n"); %>
+
 <html>
 <head>
     <title>게시글 상세보기</title>
     <style>
+        /* 스타일 생략 (기존과 동일) */
         body {
             background-color: #f5f5f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -119,7 +125,7 @@
 
         .comment-content {
             margin-bottom: 10px;
-            white-space: normal;    /* ← pre, pre-wrap, pre-line 이면 줄바꿈+공백 유지됨 */
+            white-space: normal;
         }
 
         .comment-form textarea {
@@ -170,21 +176,6 @@
             const form = document.getElementById('reply-form-' + commentId);
             form.style.display = (form.style.display === 'none') ? 'block' : 'none';
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.comment-content, #contentBox').forEach(function(el) {
-                // 텍스트 가져오기 (줄바꿈 포함)
-                const lines = el.innerText.split('\n');
-                const html = lines.map(line =>
-                    line.replace(/^\s+/, '') // 앞 공백 제거
-                        .replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                ).join('<br/>');
-                el.innerHTML = html;
-            });
-        });
-
     </script>
 </head>
 <body>
@@ -195,8 +186,8 @@
         작성일: <fmt:formatDate value="${board.createdAtDate}" pattern="yy-MM-dd HH:mm"/>
     </div>
 
-    <div class="content" id="contentBox">
-        <c:out value="${board.content}" escapeXml="true" />
+    <div class="content" id="contentBox" style="white-space: pre-line;">
+        <c:out value="${fn:escapeXml(board.content)}"/>
     </div>
 
     <div class="button-group">
@@ -211,7 +202,7 @@
                 <form action="/board/edit/${board.id}" method="get">
                     <button type="submit">수정</button>
                 </form>
-                <form action="/board/delete/{comment.id}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                <form action="/board/delete/${board.id}" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?');">
                     <input type="hidden" name="_method" value="delete"/>
                     <input type="hidden" name="id" value="${board.id}"/>
                     <button type="submit" class="delete-button">삭제</button>
@@ -247,13 +238,13 @@
                         </div>
                     </div>
 
-                    <div class="comment-content">
+                    <div class="comment-content" style="white-space: normal;">
                         <c:choose>
                             <c:when test="${comment.hidden}">
                                 <em style="color: #888;">관리자에 의해 숨김 처리된 댓글입니다.</em>
                             </c:when>
                             <c:otherwise>
-                                <c:out value="${comment.content}" escapeXml="true" />
+                                <c:out value="${fn:replace(fn:trim(comment.content), newline, '<br>')}" escapeXml="false" />
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -263,7 +254,7 @@
                         <div class="edit-form" id="edit-form-${comment.id}" style="display:none;">
                             <form method="post" action="/comment/edit/${comment.id}">
                                 <input type="hidden" name="boardId" value="${board.id}" />
-                                <textarea name="content"><c:out value="${comment.content}" /></textarea>
+                                <textarea name="content">${fn:escapeXml(fn:trim(comment.content))}</textarea>
                                 <button type="submit" class="update-btn">수정 완료</button>
                             </form>
                         </div>
@@ -289,13 +280,13 @@
                                         </c:if>
                                     </div>
                                 </div>
-                                <div class="comment-content">
+                                <div class="comment-content" style="white-space: normal;">
                                     <c:choose>
                                         <c:when test="${reply.hidden}">
                                             <em style="color: #888;">관리자에 의해 숨김 처리된 댓글입니다.</em>
                                         </c:when>
                                         <c:otherwise>
-                                            <c:out value="${reply.content}" escapeXml="true" />
+                                            <c:out value="${fn:replace(fn:trim(reply.content), newline, '<br>')}" escapeXml="false" />
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -305,7 +296,7 @@
                                     <div class="edit-form" id="edit-form-${reply.id}" style="display:none;">
                                         <form method="post" action="/comment/edit/${reply.id}">
                                             <input type="hidden" name="boardId" value="${board.id}" />
-                                            <textarea name="content"><c:out value="${reply.content}" /></textarea>
+                                            <textarea name="content">${fn:escapeXml(fn:trim(reply.content))}</textarea>
                                             <button type="submit" class="update-btn">수정 완료</button>
                                         </form>
                                     </div>
@@ -344,7 +335,6 @@
         </c:if>
     </div>
     <!-- 댓글 영역 끝 -->
-
 </div>
 </body>
 </html>
