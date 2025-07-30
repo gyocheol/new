@@ -176,6 +176,17 @@
             const form = document.getElementById('reply-form-' + commentId);
             form.style.display = (form.style.display === 'none') ? 'block' : 'none';
         }
+
+        /* 댓글 또는 대댓글을 입력하지 않으면 내용을 입력해주세요. 모달 띄우기 */
+        function validateCommentForm(form) {
+            const content = form.querySelector('textarea[name="content"]').value.trim();
+            if (content === "") {
+                alert("내용을 입력해주세요.");
+                return false;
+            }
+            return true;
+        }
+
     </script>
 </head>
 <body>
@@ -252,7 +263,7 @@
                     <!-- 댓글 수정 폼 -->
                     <c:if test="${loginUsername == comment.author}">
                         <div class="comment-form" id="edit-form-${comment.id}" style="display:none;">
-                            <form method="post" action="/comment/edit/${comment.id}">
+                            <form method="post" action="/comment/edit/${comment.id}" onsubmit="return validateCommentForm(this);">
                                 <input type="hidden" name="boardId" value="${board.id}" />
                                 <textarea name="content">${fn:escapeXml(fn:trim(comment.content))}</textarea>
                                 <button type="submit" class="update-btn">수정 완료</button>
@@ -294,7 +305,7 @@
                                 <!-- 대댓글 수정 폼 -->
                                 <c:if test="${loginUsername == reply.author}">
                                     <div class="comment-form" id="edit-form-${reply.id}" style="display:none;">
-                                        <form method="post" action="/comment/edit/${reply.id}">
+                                        <form method="post" action="/comment/edit/${reply.id}" onsubmit="return validateCommentForm(this);">
                                             <input type="hidden" name="boardId" value="${board.id}" />
                                             <textarea name="content">${fn:escapeXml(fn:trim(reply.content))}</textarea>
                                             <button type="submit" class="update-btn">수정 완료</button>
@@ -308,7 +319,7 @@
                     <!-- 대댓글 작성 폼 -->
                     <c:if test="${not empty loginUsername}">
                         <div class="comment-form" id="reply-form-${comment.id}" style="display: none; margin-top: 10px;">
-                            <form action="/comment/write" method="post">
+                            <form action="/comment/write" method="post" onsubmit="return validateCommentForm(this);">
                                 <input type="hidden" name="boardId" value="${board.id}" />
                                 <input type="hidden" name="parentId" value="${comment.id}" />
                                 <textarea name="content" placeholder="답글을 입력하세요..."></textarea>
@@ -323,7 +334,7 @@
         <!-- 댓글 작성 폼 -->
         <c:if test="${not empty loginUsername}">
             <div class="comment-form">
-                <form action="/comment/write" method="post">
+                <form action="/comment/write" method="post" onsubmit="return validateCommentForm(this);">
                     <input type="hidden" name="boardId" value="${board.id}" />
                     <textarea name="content" placeholder="댓글을 입력하세요..."></textarea>
                     <button type="submit">댓글 작성</button>
