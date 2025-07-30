@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -27,9 +28,17 @@ public class CommentController {
      * @return
      */
     @PostMapping("/write")
-    public String writeComment(@RequestParam Long boardId, @RequestParam(required = false) Long parentId, @Valid @ModelAttribute CommentReqDto dto, Principal principal) {
+    public String writeComment(@RequestParam Long boardId,
+                               @RequestParam(required = false) Long parentId,       // 대댓글에만 parentId가 들어가기 때문에 값이 안 들어오는 일반 댓글을 위해 required = false를 추가해야한다.
+                               @Valid @ModelAttribute CommentReqDto dto,
+                               BindingResult bindingResult,
+                               Principal principal) {
         if (principal == null) {
             return "redirect:/login";
+        }
+
+        if (parentId == null) {
+
         }
 
         commentService.saveComment(boardId, parentId, dto, principal);
@@ -61,7 +70,10 @@ public class CommentController {
      * @return
      */
     @PostMapping("/edit/{commentId}")
-    public String updateComment(@PathVariable Long commentId, @RequestParam Long boardId, @Valid @ModelAttribute CommentUpdateReqDto dto, Principal principal) {
+    public String updateComment(@PathVariable Long commentId,
+                                @RequestParam Long boardId,
+                                @Valid @ModelAttribute CommentUpdateReqDto dto,
+                                Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }

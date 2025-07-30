@@ -251,7 +251,7 @@
 
                     <!-- 댓글 수정 폼 -->
                     <c:if test="${loginUsername == comment.author}">
-                        <div class="edit-form" id="edit-form-${comment.id}" style="display:none;">
+                        <div class="comment-form" id="edit-form-${comment.id}" style="display:none;">
                             <form method="post" action="/comment/edit/${comment.id}">
                                 <input type="hidden" name="boardId" value="${board.id}" />
                                 <textarea name="content">${fn:escapeXml(fn:trim(comment.content))}</textarea>
@@ -293,7 +293,7 @@
 
                                 <!-- 대댓글 수정 폼 -->
                                 <c:if test="${loginUsername == reply.author}">
-                                    <div class="edit-form" id="edit-form-${reply.id}" style="display:none;">
+                                    <div class="comment-form" id="edit-form-${reply.id}" style="display:none;">
                                         <form method="post" action="/comment/edit/${reply.id}">
                                             <input type="hidden" name="boardId" value="${board.id}" />
                                             <textarea name="content">${fn:escapeXml(fn:trim(reply.content))}</textarea>
