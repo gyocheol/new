@@ -21,6 +21,8 @@
             </c:if>
 
             <form method="post" action="/login">
+                <!-- redirectURL hidden input 추가 -->
+                <input type="hidden" name="redirectURL" value="${param.redirectURL}" />
                 <div class="mb-3">
                     <label class="form-label">아이디</label>
                     <input type="text" class="form-control" name="username" required>

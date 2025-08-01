@@ -4,6 +4,7 @@ import com.example.board.config.NewCustomException;
 import com.example.board.dto.BoardResDto;
 import com.example.board.dto.BoardUpdateReqDto;
 import com.example.board.dto.BoardWriteDto;
+import com.example.board.dto.CommentResDto;
 import com.example.board.entity.Board;
 import com.example.board.repository.BoardRepository;
 import com.example.board.repository.UserRepository;
@@ -22,6 +23,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final CommentService commentService;
 
     @Override
     public List<BoardResDto> findAllBoard() {
@@ -94,9 +96,12 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new NewCustomException("게시글이 없습니다."));
 
+        List<CommentResDto> comments = commentService.findAllComment(id);
+
         String loginUsername = (principal != null) ? principal.getName() : "";
 
         model.addAttribute("board", board);
+        model.addAttribute("comments", comments);
         model.addAttribute("loginUsername", loginUsername);
     }
 
