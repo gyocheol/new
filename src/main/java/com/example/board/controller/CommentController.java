@@ -37,10 +37,6 @@ public class CommentController {
             return "redirect:/login";
         }
 
-        if (parentId == null) {
-
-        }
-
         commentService.saveComment(boardId, parentId, dto, principal);
         return "redirect:/board/view/" + boardId;
     }
@@ -69,7 +65,7 @@ public class CommentController {
      * @param principal
      * @return
      */
-    @PostMapping("/edit/{commentId}")
+    @PostMapping("/edit/{commentId}")       // TODO : 게시글과 마찬가지로 수정 시간을 따로 만들기
     public String updateComment(@PathVariable Long commentId,
                                 @RequestParam Long boardId,
                                 @Valid @ModelAttribute CommentUpdateReqDto dto,
