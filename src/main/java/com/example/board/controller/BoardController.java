@@ -89,7 +89,7 @@ public class BoardController {
     }
 
     /**
-     * 게시글 수정 TODO : 매핑 주소를 restful한 설계로 변경하기 / PathVariable로 id 받아오기!
+     * 게시글 수정
      * @param id
      * @param dto
      * @param principal
@@ -101,6 +101,6 @@ public class BoardController {
             return "redirect:/login";
         }
         boardService.updateBoard(id, principal.getName(), dto);
-        return "redirect:/board/view/" + id;
+        return "redirect:/board/view/" +id;
     }
 }
