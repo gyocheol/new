@@ -45,12 +45,12 @@ public class BoardController {
     }
 
     /**
-     * 게시글 삭제 TODO : 매핑 주소를 restful한 설계로 변경하기 / PathVariable로 id 받아오기!
+     * 게시글 삭제
      * @param id
      * @param principal
      * @return home.jsp
      */
-    @PostMapping("/board/delete")     // HTML <form> 태그는 delete method를 지원하지 않는다.
+    @PostMapping("/board/delete/{id}")     // HTML <form> 태그는 delete method를 지원하지 않는다.
     public String deleteBoard(@RequestParam Long id, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
@@ -95,7 +95,7 @@ public class BoardController {
      * @param principal
      * @return
      */
-    @PostMapping("/board/edit")
+    @PostMapping("/board/edit/{id}")
     public String updateBoard(@RequestParam Long id, @Valid @ModelAttribute BoardUpdateReqDto dto, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
