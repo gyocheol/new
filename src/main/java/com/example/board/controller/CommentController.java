@@ -65,7 +65,7 @@ public class CommentController {
      * @param principal
      * @return
      */
-    @PostMapping("/edit/{commentId}")       // TODO : 게시글과 마찬가지로 수정 시간을 따로 만들기
+    @PostMapping("/edit/{commentId}")
     public String updateComment(@PathVariable Long commentId,
                                 @RequestParam Long boardId,
                                 @Valid @ModelAttribute CommentUpdateReqDto dto,

@@ -194,7 +194,10 @@
     <div class="title">${board.title}</div>
     <div class="info">
         작성자: ${board.author.username} |
-        작성일: <fmt:formatDate value="${board.createdAtDate}" pattern="yy-MM-dd HH:mm"/>
+        작성일: <fmt:formatDate value="${board.createdAtDate}" pattern="yy.MM.dd HH:mm"/>
+        <c:if test="${board.updatedAtDate != null}">
+             | 수정일: <fmt:formatDate value="${board.updatedAtDate}" pattern="yy.MM.dd HH:mm"/>
+        </c:if>
     </div>
 
     <div class="content" id="contentBox" style="white-space: pre-line;">
@@ -231,7 +234,10 @@
                     <div class="comment-meta" style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             ${comment.author} |
-                            <fmt:formatDate value="${comment.createdAtDate}" pattern="yy-MM-dd HH:mm"/>
+                            <fmt:formatDate value="${comment.createdAtDate}" pattern="yy.MM.dd HH:mm"/>
+                            <c:if test="${comment.updatedAtDate != null}">
+                                 | <fmt:formatDate value="${comment.updatedAtDate}" pattern="yy.MM.dd HH:mm"/>
+                            </c:if>
                         </div>
                         <div>
                             <c:if test="${not empty loginUsername}">
@@ -277,8 +283,11 @@
                             <div class="reply">
                                 <div class="comment-meta" style="display: flex; justify-content: space-between; align-items: center;">
                                     <div>
-                                        ${reply.author} ·
+                                        ${reply.author} |
                                         <fmt:formatDate value="${reply.createdAtDate}" pattern="yy-MM-dd HH:mm"/>
+                                        <c:if test="${reply.updatedAtDate != null}">
+                                             | <fmt:formatDate value="${reply.updatedAtDate}" pattern="yy.MM.dd HH:mm"/>
+                                        </c:if>
                                     </div>
                                     <div>
                                         <c:if test="${loginUsername == reply.author}">

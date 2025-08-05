@@ -20,6 +20,7 @@ public class Comment {
     private Long id;
     private String content;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private boolean hidden = false;     // 관리자용
     @ManyToOne
     private User author;
@@ -29,9 +30,10 @@ public class Comment {
     private Comment parent;     // 대댓글용
 
     @Builder
-    public Comment(String content, LocalDateTime createdAt, boolean hidden, User author, Board board, Comment parent) {
+    public Comment(String content, LocalDateTime createdAt, LocalDateTime updatedAt, boolean hidden, User author, Board board, Comment parent) {
         this.content = content;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.hidden = hidden;
         this.author = author;
         this.board = board;
@@ -40,5 +42,9 @@ public class Comment {
 
     public Date getCreatedAtDate() {
         return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public Date getUpdatedAtDate() {
+        return updatedAt != null ? Date.from(updatedAt.atZone(ZoneId.systemDefault()).toInstant()) : null;
     }
 }
