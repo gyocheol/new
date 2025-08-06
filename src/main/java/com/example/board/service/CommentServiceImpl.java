@@ -57,7 +57,8 @@ public class CommentServiceImpl implements CommentService {
                         comment.getAuthor().getUsername(),
                         comment.isHidden(),
                         comment.getParent(),
-                        comment.getCreatedAt()
+                        comment.getCreatedAt(),
+                        comment.getUpdatedAt()
                 ))
                 .collect(Collectors.toList());
     }
@@ -86,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = validationComment(commentId, principal);
 
         comment.setContent(dto.getContent());
-        comment.setCreatedAt(LocalDateTime.now());
+        comment.setUpdatedAt(LocalDateTime.now());
 
         commentRepository.save(comment);
     }

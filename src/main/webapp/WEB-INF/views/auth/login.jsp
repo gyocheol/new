@@ -40,5 +40,13 @@
         </div>
     </div>
 </div>
+<script>
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted || (window.performance && performance.navigation.type === 2)) {
+            // 뒤로가기로 접근한 경우 목록 페이지로 이동
+            window.location.replace('/');
+        }
+    });
+</script>
 </body>
 </html>

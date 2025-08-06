@@ -16,16 +16,22 @@ public class BoardResDto {
     private String content;
     private String author;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    @Builder
+    public BoardResDto(String title, String content, String author, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     public Date getCreatedAtDate() {
         return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    @Builder
-    public BoardResDto(String title, String content, String author, LocalDateTime createdAt) {
-        this.title = title;
-        this.content = content;
-        this.author = author;
-        this.createdAt = createdAt;
+    public Date getUpdatedAtDate() {
+        return updatedAt != null ? Date.from(updatedAt.atZone(ZoneId.systemDefault()).toInstant()) : null;
     }
 }

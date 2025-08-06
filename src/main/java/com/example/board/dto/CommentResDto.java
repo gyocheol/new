@@ -18,17 +18,23 @@ public class CommentResDto {
     private boolean hidden;
     private Comment parent;
     private LocalDateTime createdAt;
-
-    public Date getCreatedAtDate() {
-        return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
-    }
+    private LocalDateTime updatedAt;
 
     @Builder
-    public CommentResDto(String content, String author, boolean hidden, Comment parent, LocalDateTime createdAt) {
+    public CommentResDto(String content, String author, boolean hidden, Comment parent, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.content = content;
         this.author = author;
         this.hidden = hidden;
         this.parent = parent;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getCreatedAtDate() {
+        return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public Date getUpdatedAtDate() {
+        return updatedAt != null ? Date.from(updatedAt.atZone(ZoneId.systemDefault()).toInstant()) : null;
     }
 }

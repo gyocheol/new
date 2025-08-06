@@ -35,7 +35,8 @@ public class BoardServiceImpl implements BoardService {
                         board.getTitle(),
                         board.getContent(),
                         board.getAuthor().getUsername(),
-                        board.getCreatedAt()
+                        board.getCreatedAt(),
+                        board.getUpdatedAt()
                 ))
                 .collect(Collectors.toList());
     }
@@ -86,7 +87,7 @@ public class BoardServiceImpl implements BoardService {
         // board update
         board.setTitle(dto.getTitle());
         board.setContent(dto.getContent());
-        board.setCreatedAt(LocalDateTime.now());
+        board.setUpdatedAt(LocalDateTime.now());
 
         boardRepository.save(board);
     }
