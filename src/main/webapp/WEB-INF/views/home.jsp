@@ -141,7 +141,7 @@
             <c:when test="${not empty username}">
                 <div class="user-info">
                     <span>안녕하세요, ${username}님!</span>
-                    <a href="/my-page">내 정보</a>
+                    <a href="/mypage">내 정보</a>
                     <a href="/logout">로그아웃</a>
                 </div>
             </c:when>
