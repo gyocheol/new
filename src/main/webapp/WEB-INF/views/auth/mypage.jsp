@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <%@ include file="/WEB-INF/views/common/header.jsp" %>
     <meta charset="UTF-8">
     <title>마이페이지</title>
     <style>
@@ -187,20 +188,7 @@
     </div>
 </div>
 
-<!-- 다크모드 토글 버튼 -->
-<button class="theme-toggle" onclick="toggleTheme()" title="테마 전환">
-    <img src="https://cdn-icons-png.flaticon.com/512/6714/6714978.png" alt="테마 전환 아이콘" />
-</button>
-
 <script>
-    // 다크모드 전환
-    function toggleTheme() {
-        const body = document.body;
-        const current = body.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        body.setAttribute('data-theme', next);
-    }
-
     // 탭 전환
     document.querySelectorAll('.tab-btn').forEach(button => {
         button.addEventListener('click', () => {

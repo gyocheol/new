@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <%@ include file="/WEB-INF/views/common/header.jsp" %>
     <meta charset="UTF-8">
     <title>게시판</title>
     <style>
@@ -186,20 +187,6 @@
 <c:if test="${not empty username}">
     <a href="/board/write-form" class="fab">게시글 작성</a>
 </c:if>
-
-<!-- 다크모드 토글 버튼 (좌측 하단) -->
-<button class="theme-toggle" onclick="toggleTheme()" title="테마 전환">
-    <img src="https://cdn-icons-png.flaticon.com/512/6714/6714978.png" alt="테마 전환 아이콘" />
-</button>
-
-<script>
-    function toggleTheme() {
-        const body = document.body;
-        const current = body.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        body.setAttribute('data-theme', next);
-    }
-</script>
 
 </body>
 </html>
