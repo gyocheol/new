@@ -8,23 +8,49 @@
 
 <html>
 <head>
+    <%@ include file="/WEB-INF/views/common/header.jsp" %>
     <title>게시글 상세보기</title>
     <style>
-        /* 스타일 생략 (기존과 동일) */
-        body {
-            background-color: #f5f5f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
+        :root {
+            --bg-color: #f2f4f7;
+            --text-color: #000;
+            --table-bg: #fff;
+            --header-bg: #fff;
+            --th-bg: #f5f5f5;
+            --btn-bg: #007bff;
+            --btn-text: #fff;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f1f1f1;
+            --table-bg: #1e1e1e;
+            --header-bg: #1f1f1f;
+            --th-bg: #2a2a2a;
+            --btn-bg: #3a82f7;
+            --btn-text: #fff;
+            --active-tab: #00b050;
         }
 
         .container {
             width: 60%;
             margin: 40px auto;
-            background-color: white;
+            background-color: var(--table-bg);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        :root {
+            --bg-color: #f2f4f7;
+            --text-color: #000;
+            --table-bg: #fff;     /* 컨테이너 기본 색 (라이트모드) */
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f1f1f1;
+            --table-bg: #1e1e1e;  /* 컨테이너 다크모드 색 */
         }
 
         .title {
@@ -110,7 +136,6 @@
         }
 
         .reply {
-            background-color: #f9f9f9;
             padding: 10px 15px;
             margin: 10px 0 0 20px;
             border-left: 3px solid #ccc;
@@ -137,6 +162,11 @@
             border-radius: 6px;
             border: 1px solid #ccc;
             margin-bottom: 10px;
+            background-color: var(--table-bg);
+            color: var(--text-color);
+        }
+        [data-theme="dark"] form textarea {
+            border: 1px solid #555;
         }
 
         .comment-form button {

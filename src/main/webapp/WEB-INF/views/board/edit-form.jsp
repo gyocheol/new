@@ -3,22 +3,54 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <head>
+    <%@ include file="/WEB-INF/views/common/header.jsp" %>
     <title>게시글 수정</title>
     <style>
         body {
-            background-color: #f5f5f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+        }
+        :root {
+            --bg-color: #f2f4f7;
+            --text-color: #000;
+            --table-bg: #fff;
+            --header-bg: #fff;
+            --th-bg: #f5f5f5;
+            --btn-bg: #007bff;
+            --btn-text: #fff;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f1f1f1;
+            --table-bg: #1e1e1e;
+            --header-bg: #1f1f1f;
+            --th-bg: #2a2a2a;
+            --btn-bg: #3a82f7;
+            --btn-text: #fff;
+            --active-tab: #00b050;
         }
 
         .container {
             width: 60%;
             margin: 40px auto;
-            background-color: white;
+            background-color: var(--table-bg);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        :root {
+            --bg-color: #f2f4f7;
+            --text-color: #000;
+            --table-bg: #fff;     /* 컨테이너 기본 색 (라이트모드) */
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f1f1f1;
+            --table-bg: #1e1e1e;  /* 컨테이너 다크모드 색 */
         }
 
         h2 {
@@ -41,6 +73,12 @@
             border: 1px solid #ccc;
             border-radius: 6px;
             box-sizing: border-box;
+            background-color: var(--table-bg);  /* 테마 적용 */
+            color: var(--text-color);           /* 글자색 테마 적용 */
+        }
+        [data-theme="dark"] form input[type="text"],
+        [data-theme="dark"] form textarea {
+            border: 1px solid #555;
         }
 
         form textarea {
