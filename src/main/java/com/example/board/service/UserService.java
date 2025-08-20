@@ -1,5 +1,6 @@
 package com.example.board.service;
 
+import com.example.board.dto.UserGroupResDto;
 import com.example.board.dto.UserRegisterDto;
 import org.springframework.ui.Model;
 
@@ -20,4 +21,6 @@ public interface UserService {
      * @return
      */
     void forwardUsername(Model model, Principal principal);
+
+    UserGroupResDto getAllUserGroup();
 }

@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +37,7 @@ public class BoardServiceImpl implements BoardService {
                         board.getCreatedAt(),
                         board.getUpdatedAt()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

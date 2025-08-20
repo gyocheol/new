@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
                         comment.getCreatedAt(),
                         comment.getUpdatedAt()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

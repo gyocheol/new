@@ -1,6 +1,8 @@
 package com.example.board.service;
 
+import com.example.board.dto.UserGroupResDto;
 import com.example.board.dto.UserRegisterDto;
+import com.example.board.dto.UserResDto;
 import com.example.board.entity.Role;
 import com.example.board.entity.User;
 import com.example.board.repository.UserRepository;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +43,32 @@ public class UserServiceImpl implements UserService {
         if (principal != null) {
             model.addAttribute("username", principal.getName());
         }
+    }
+
+    @Override
+    public UserGroupResDto getAllUserGroup() {
+        List<User> allUsers = userRepository.findAll();
+
+        List<UserResDto> admins = allUsers.stream()
+                .filter(user -> user.getRole() == Role.ROLE_ADMIN)
+                .map(user -> new UserResDto(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getRole()
+                ))
+                .toList();
+        List<UserResDto> users = allUsers.stream()
+                .filter(user -> user.getRole() == Role.ROLE_USER)
+                .map(user -> new UserResDto(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getRole()
+                ))
+                .toList();
+
+        return UserGroupResDto.builder()
+                .admins(admins)
+                .users(users)
+                .build();
     }
 }

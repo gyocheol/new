@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class MyPageServiceImpl implements MyPageService {
                         board.getCreatedAt(),
                         board.getUpdatedAt()
                 ))
-                .collect(Collectors.toList());
+                .toList();
         model.addAttribute("myBoardList", boardList);
     }
 
@@ -50,7 +49,7 @@ public class MyPageServiceImpl implements MyPageService {
                         comment.getCreatedAt(),
                         comment.getUpdatedAt()
                 ))
-                .collect(Collectors.toList());
+                .toList();
         model.addAttribute("myCommentList", commentList);
     }
 
