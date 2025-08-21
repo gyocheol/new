@@ -176,7 +176,11 @@
                     <c:forEach var="user" items="${userGroup.users}" varStatus="loop">
                         <tr>
                             <td>${loop.count}</td>
-                            <td>${user.username}</td>
+                            <td>
+                                <a href="/admin/detail/${user.id}?username=${user.username}" class="user-name-link">
+                                    ${user.username}
+                                </a>
+                            </td>
                             <td>${user.role}</td>
                         </tr>
                     </c:forEach>

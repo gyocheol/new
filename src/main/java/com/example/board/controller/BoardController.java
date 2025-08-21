@@ -96,7 +96,7 @@ public class BoardController {
      * @return
      */
     @PostMapping("/board/edit/{id}")
-    public String updateBoard(@RequestParam Long id, @Valid @ModelAttribute BoardUpdateReqDto dto, Principal principal) {
+    public String updateBoard(@PathVariable Long id, @Valid @ModelAttribute BoardUpdateReqDto dto, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }

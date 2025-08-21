@@ -9,14 +9,14 @@ public interface MyPageService {
     /**
      * 내가 쓴 게시글 조회
      * @param model
-     * @param principal
+     * @param username
      */
-    void findAllMyBoard(Model model, Principal principal);
+    void findAllMyBoard(Model model, String username);
 
     /**
      * 내가 쓴 댓글 조회
      * @param model
-     * @param principal
+     * @param username
      */
-    void findAllMyComment(Model model, Principal principal);
+    void findAllMyComment(Model model, String username);
 }

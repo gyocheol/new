@@ -24,8 +24,8 @@ public class MyPageServiceImpl implements MyPageService {
     private final UserRepository userRepository;
 
     @Override
-    public void findAllMyBoard(Model model, Principal principal) {
-        List<Board> boards = boardRepository.findByAuthorOrderByCreatedAtAsc(getUser(principal));
+    public void findAllMyBoard(Model model, String username) {
+        List<Board> boards = boardRepository.findByAuthorOrderByCreatedAtAsc(getUser(username));
         List<MyBoardResDto> boardList = boards.stream()
                 .map(board -> new MyBoardResDto(
                         board.getId(),
@@ -38,8 +38,8 @@ public class MyPageServiceImpl implements MyPageService {
     }
 
     @Override
-    public void findAllMyComment(Model model, Principal principal) {
-        List<Comment> comments = commentRepository.findByAuthorOrderByCreatedAtAsc(getUser(principal));
+    public void findAllMyComment(Model model, String username) {
+        List<Comment> comments = commentRepository.findByAuthorOrderByCreatedAtAsc(getUser(username));
 
         List<MyCommentResDto> commentList = comments.stream()
                 .map(comment -> new MyCommentResDto(
@@ -53,9 +53,8 @@ public class MyPageServiceImpl implements MyPageService {
         model.addAttribute("myCommentList", commentList);
     }
 
-    private User getUser(Principal principal) {
-        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
-
+    private User getUser(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow();
         return user;
     }
 }
