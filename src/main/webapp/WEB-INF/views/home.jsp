@@ -141,8 +141,16 @@
         <c:choose>
             <c:when test="${not empty username}">
                 <div class="user-info">
-                    <span>안녕하세요, ${username}님!</span>
-                    <a href="/mypage">내 정보</a>
+                    <c:choose>
+                        <c:when test="${role == 'ROLE_ADMIN'}">
+                            <span>안녕하세요, 관리자님!</span>
+                            <a href="/admin">관리자 탭</a>
+                        </c:when>
+                        <c:otherwise>
+                            <span>안녕하세요, ${username}님!</span>
+                            <a href="/mypage">내 정보</a>
+                        </c:otherwise>
+                    </c:choose>
                     <a href="/logout">로그아웃</a>
                 </div>
             </c:when>

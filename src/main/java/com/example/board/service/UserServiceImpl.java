@@ -46,6 +46,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void forwardRole(Model model, Principal principal) {
+        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+        model.addAttribute("role", user.getRole());
+    }
+
+    @Override
     public UserGroupResDto getAllUserGroup() {
         List<User> allUsers = userRepository.findAll();
 

@@ -28,8 +28,11 @@ public class HomeController {
      */
     @GetMapping("/")
     public String home(Model model, Principal principal) {
-        // 로그인한 사용자 이름을 모델에 전달, 없다면 null
+        // 로그인한 사용자 이름을 모델로 전달, 없다면 null
         userService.forwardUsername(model, principal);
+
+        // 사용자의 권한을 모델로 전달
+        userService.forwardRole(model, principal);
 
         // 게시글 목록도 모델에 전달
         List<BoardResDto> boards = boardService.findAllBoard();

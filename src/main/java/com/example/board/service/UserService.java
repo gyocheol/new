@@ -22,5 +22,12 @@ public interface UserService {
      */
     void forwardUsername(Model model, Principal principal);
 
+    /**
+     * frontend에게 로그인한 유저의 권한을 전달
+     * @param model
+     * @param principal
+     */
+    void forwardRole(Model model, Principal principal);
+
     UserGroupResDto getAllUserGroup();
 }

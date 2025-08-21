@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class MyCommentResDto {
     private Long id;
@@ -17,14 +18,6 @@ public class MyCommentResDto {
     private Board board;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    @Builder
-    public MyCommentResDto(String content, Board board, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.content = content;
-        this.board = board;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
     public Date getCreatedAtDate() {
         return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
