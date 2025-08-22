@@ -1,15 +1,16 @@
 package com.example.board.controller;
 
 import com.example.board.dto.UserGroupResDto;
+import com.example.board.service.BoardService;
 import com.example.board.service.MyPageService;
 import com.example.board.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AdminController {
     private final UserService userService;
     private final MyPageService myPageService;
+    private final BoardService boardService;
 
     @GetMapping
     public String adminPage(Model model) {
@@ -31,5 +33,11 @@ public class AdminController {
         myPageService.findAllMyComment(model, username);
         model.addAttribute("targetUsername", username);
         return "admin/userDetail";
+    }
+
+    @PostMapping("/toggle-hidden/{boardId}")
+    public ResponseEntity<String> toggleHidden(@PathVariable Long boardId, Principal principal) {
+        boolean hidden = boardService.toggleHidden(boardId, principal);
+        return ResponseEntity.ok(hidden ? "숨김 처리됨":"숨김 해제됨");
     }
 }

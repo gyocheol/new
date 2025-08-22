@@ -18,7 +18,6 @@ public interface UserService {
      * frontend에게 로그인한 유저 이름을 전달
      * @param model
      * @param principal
-     * @return
      */
     void forwardUsername(Model model, Principal principal);
 
@@ -29,5 +28,9 @@ public interface UserService {
      */
     void forwardRole(Model model, Principal principal);
 
+    /**
+     * 모든 유저 및 관리자 그룹 조회
+     * @return 모든 관리자와 유저
+     */
     UserGroupResDto getAllUserGroup();
 }

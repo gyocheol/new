@@ -35,7 +35,7 @@ public class HomeController {
         userService.forwardRole(model, principal);
 
         // 게시글 목록도 모델에 전달
-        List<BoardResDto> boards = boardService.findAllBoard();
+        List<BoardResDto> boards = boardService.findBoardsByRole(principal);
         model.addAttribute("boardList", boards);
 
         return "home";

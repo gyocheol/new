@@ -130,7 +130,10 @@
             width: 100%;
             height: auto;
         }
-
+        .hidden-board {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -168,14 +171,17 @@
     <table>
         <thead>
             <tr>
-                <th style="width:60%;">제목</th>
-                <th style="width:20%;">작성자</th>
+                <th style="width:auto;">제목</th>
+                <th style="width:10%;">작성자</th>
                 <th style="width:20%;">작성일</th>
+                <c:if test="${role == 'ROLE_ADMIN'}">
+                    <th style="width:10%;">관리</th>
+                </c:if>
             </tr>
         </thead>
         <tbody>
             <c:forEach var="board" items="${boardList}">
-                <tr>
+                <tr id="board-row-${board.id}" class="${board.hidden ? 'hidden-board' : ''}">
                     <td class="title-cell">
                         <a href="/board/view/${board.id}" style="text-decoration:none; color:#007bff;">
                             ${board.title}
@@ -185,6 +191,17 @@
                     <td class="date-cell">
                         <fmt:formatDate value="${board.createdAtDate}" pattern="yy-MM-dd HH:mm"/>
                     </td>
+
+                    <c:if test="${role == 'ROLE_ADMIN'}">
+                        <td class="admin-action-cell">
+                            <button type="button"
+                                    class="toggle-visibility-btn"
+                                    data-board-id="${board.id}"
+                                    data-hidden="${board.hidden}">
+                                ${board.hidden ? '숨김 해제' : '숨김'}
+                            </button>
+                        </td>
+                    </c:if>
                 </tr>
             </c:forEach>
         </tbody>
@@ -196,5 +213,41 @@
     <a href="/board/write-form" class="fab">게시글 작성</a>
 </c:if>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".toggle-visibility-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+            const boardId = btn.dataset.boardId;
+            const hidden = btn.dataset.hidden === "true";
+            try {
+                const response = await fetch(`/admin/toggle-hidden/${boardId}`, {
+                    method: "POST"
+                });
+
+                if (!response.ok) {
+                    throw new Error(`서버 오류: ${response.status}`);
+                }
+
+                const msg = await response.text();
+                alert(msg);
+
+                // 버튼 상태 토글
+                btn.dataset.hidden = (!hidden).toString();
+                btn.textContent = hidden ? "숨김" : "숨김 해제";
+
+                // 행 스타일 토글
+                const row = document.getElementById(`board-row-${boardId}`);
+                if (row) {
+                    row.classList.toggle("hidden-board", !hidden);
+                }
+
+            } catch (err) {
+                console.error("요청 실패:", err);
+                alert("처리 중 오류 발생: " + err.message);
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

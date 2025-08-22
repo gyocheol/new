@@ -195,7 +195,6 @@
     </div>
 
     <script>
-        // 탭 전환 JavaScript (마이페이지에서 제공된 코드와 동일)
         document.querySelectorAll('.tab-btn').forEach(button => {
             button.addEventListener('click', () => {
                 const target = button.getAttribute('data-tab');

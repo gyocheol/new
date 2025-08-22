@@ -95,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
      * 자신의 댓글 유효성 확인
      * @param commentId
      * @param principal
-     * @return
+     * @return comment
      */
     private Comment validationComment(Long commentId, Principal principal) {
         Comment comment = commentRepository.findById(commentId)

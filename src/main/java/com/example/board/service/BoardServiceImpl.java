@@ -6,6 +6,8 @@ import com.example.board.dto.BoardUpdateReqDto;
 import com.example.board.dto.BoardWriteDto;
 import com.example.board.dto.CommentResDto;
 import com.example.board.entity.Board;
+import com.example.board.entity.Role;
+import com.example.board.entity.User;
 import com.example.board.repository.BoardRepository;
 import com.example.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +27,27 @@ public class BoardServiceImpl implements BoardService {
     private final CommentService commentService;
 
     @Override
-    public List<BoardResDto> findAllBoard() {
-        List<Board> boards = boardRepository.findByHiddenFalse();
+    public List<BoardResDto> findBoardsByRole(Principal principal) {
+        boolean isAdmin = false;
+        if (principal != null) {
+            User user = userRepository.findByUsername(principal.getName())
+                    .orElseThrow();
+            isAdmin = user.getRole() == Role.ROLE_ADMIN;
+        }
+
+        List<Board> boards = isAdmin
+                ?boardRepository.findAll()
+                :boardRepository.findByHiddenFalse();
 
         return boards.stream()
                 .map(board -> new BoardResDto(
                         board.getId(),
                         board.getTitle(),
                         board.getContent(),
-                        board.getAuthor().getUsername(),
+                        board.getAuthor().getRole().equals(Role.ROLE_ADMIN)
+                                ?"관리자"
+                                :board.getAuthor().getUsername(),
+                        board.isHidden(),
                         board.getCreatedAt(),
                         board.getUpdatedAt()
                 ))
@@ -41,10 +55,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void hideBoard(Long id) {
+    public boolean toggleHidden(Long id, Principal principal) {
         Board board = boardRepository.findById(id).orElseThrow();
-        board.setHidden(true);
-        boardRepository.save(board);
+        if (principal != null) {
+            User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+            if (user.getRole().equals(Role.ROLE_ADMIN)) {
+                board.setHidden(!board.isHidden());
+                boardRepository.save(board);
+            }
+        }
+        return board.isHidden();
     }
 
     @Override

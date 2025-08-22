@@ -47,8 +47,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void forwardRole(Model model, Principal principal) {
-        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
-        model.addAttribute("role", user.getRole());
+        if (principal != null) {
+            User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+            model.addAttribute("role", user.getRole());
+        }
     }
 
     @Override
