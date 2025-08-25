@@ -36,8 +36,8 @@ public class AdminController {
     }
 
     @PostMapping("/toggle-hidden/{boardId}")
-    public ResponseEntity<String> toggleHidden(@PathVariable Long boardId, Principal principal) {
+    public String toggleHidden(@PathVariable Long boardId, Principal principal) {
         boolean hidden = boardService.toggleHidden(boardId, principal);
-        return ResponseEntity.ok(hidden ? "숨김 처리됨":"숨김 해제됨");
+        return "redirect:/";
     }
 }

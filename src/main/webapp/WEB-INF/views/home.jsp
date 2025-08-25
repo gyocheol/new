@@ -130,9 +130,42 @@
             width: 100%;
             height: auto;
         }
+
         .hidden-board {
             opacity: 0.5;
             text-decoration: line-through;
+        }
+
+        .admin-action-cell {
+            text-align: center;   /* 셀 가운데 정렬 */
+        }
+
+        .admin-action-cell form {
+            display: inline-block; /* form을 가로로 배치 */
+            margin: 0 4px;         /* 버튼 사이 간격 */
+        }
+
+        .admin-action-wrapper {
+            display: flex;
+            justify-content: center; /* 버튼들을 가운데 정렬 */
+            gap: 6px;                /* 버튼 간격 */
+        }
+
+        .act-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;   /* 줄바꿈 방지 */
+            min-width: 60px;       /* 버튼 최소 너비 확보 */
+            text-align: center;    /* 글자 가운데 정렬 */
+        }
+
+        .act-btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -175,7 +208,7 @@
                 <th style="width:10%;">작성자</th>
                 <th style="width:20%;">작성일</th>
                 <c:if test="${role == 'ROLE_ADMIN'}">
-                    <th style="width:10%;">관리</th>
+                    <th style="width:20%;">관리</th>
                 </c:if>
             </tr>
         </thead>
@@ -194,12 +227,11 @@
 
                     <c:if test="${role == 'ROLE_ADMIN'}">
                         <td class="admin-action-cell">
-                            <button type="button"
-                                    class="toggle-visibility-btn"
-                                    data-board-id="${board.id}"
-                                    data-hidden="${board.hidden}">
-                                ${board.hidden ? '숨김 해제' : '숨김'}
-                            </button>
+                            <form action="/admin/toggle-hidden/${board.id}" method="post" style="display:inline;">
+                                <button type="submit" class="act-btn">
+                                    ${board.hidden ? '해제' : '숨김'}
+                                </button>
+                            </form>
                         </td>
                     </c:if>
                 </tr>
@@ -212,42 +244,5 @@
 <c:if test="${not empty username}">
     <a href="/board/write-form" class="fab">게시글 작성</a>
 </c:if>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".toggle-visibility-btn").forEach(btn => {
-        btn.addEventListener("click", async () => {
-            const boardId = btn.dataset.boardId;
-            const hidden = btn.dataset.hidden === "true";
-            try {
-                const response = await fetch(`/admin/toggle-hidden/${boardId}`, {
-                    method: "POST"
-                });
-
-                if (!response.ok) {
-                    throw new Error(`서버 오류: ${response.status}`);
-                }
-
-                const msg = await response.text();
-                alert(msg);
-
-                // 버튼 상태 토글
-                btn.dataset.hidden = (!hidden).toString();
-                btn.textContent = hidden ? "숨김" : "숨김 해제";
-
-                // 행 스타일 토글
-                const row = document.getElementById(`board-row-${boardId}`);
-                if (row) {
-                    row.classList.toggle("hidden-board", !hidden);
-                }
-
-            } catch (err) {
-                console.error("요청 실패:", err);
-                alert("처리 중 오류 발생: " + err.message);
-            }
-        });
-    });
-});
-</script>
 </body>
 </html>
