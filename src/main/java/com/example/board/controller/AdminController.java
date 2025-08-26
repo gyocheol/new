@@ -5,7 +5,6 @@ import com.example.board.service.BoardService;
 import com.example.board.service.MyPageService;
 import com.example.board.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +36,7 @@ public class AdminController {
 
     @PostMapping("/toggle-hidden/{boardId}")
     public String toggleHidden(@PathVariable Long boardId, Principal principal) {
-        boolean hidden = boardService.toggleHidden(boardId, principal);
+        boardService.toggleHiddenBoard(boardId, principal);
         return "redirect:/";
     }
 }

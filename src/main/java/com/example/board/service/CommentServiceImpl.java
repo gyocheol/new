@@ -6,6 +6,7 @@ import com.example.board.dto.CommentResDto;
 import com.example.board.dto.CommentUpdateReqDto;
 import com.example.board.entity.Board;
 import com.example.board.entity.Comment;
+import com.example.board.entity.Role;
 import com.example.board.entity.User;
 import com.example.board.repository.BoardRepository;
 import com.example.board.repository.CommentRepository;
@@ -89,6 +90,18 @@ public class CommentServiceImpl implements CommentService {
         comment.setUpdatedAt(LocalDateTime.now());
 
         commentRepository.save(comment);
+    }
+
+    @Override
+    public void toggleHiddenComment(Long commentId, Principal principal) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
+        if (principal != null) {
+            User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+            if (user.getRole().equals(Role.ROLE_ADMIN)) {
+                comment.setHidden(!comment.isHidden());
+                commentRepository.save(comment);
+            }
+        }
     }
 
     /**

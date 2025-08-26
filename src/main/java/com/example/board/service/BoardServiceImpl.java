@@ -55,7 +55,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public boolean toggleHidden(Long id, Principal principal) {
+    public void toggleHiddenBoard(Long id, Principal principal) {
         Board board = boardRepository.findById(id).orElseThrow();
         if (principal != null) {
             User user = userRepository.findByUsername(principal.getName()).orElseThrow();
@@ -64,7 +64,6 @@ public class BoardServiceImpl implements BoardService {
                 boardRepository.save(board);
             }
         }
-        return board.isHidden();
     }
 
     @Override

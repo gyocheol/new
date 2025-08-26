@@ -47,4 +47,11 @@ public interface CommentService {
      * @param principal
      */
     void updateComment(Long commentId, Principal principal, CommentUpdateReqDto dto);
+
+    /**
+     * 관리자가 댓글 hidden 처리
+     * @param commentId
+     * @param principal
+     */
+    void toggleHiddenComment(Long commentId, Principal principal);
 }

@@ -18,12 +18,11 @@ public interface BoardService {
     List<BoardResDto> findBoardsByRole(Principal principal);
 
     /**
-     * 게시글 hidden 처리 TODO : 관리자 설정 이후 구현하기
+     * 관리자가 게시글 hidden 처리
      * @param id
      * @param principal
-     * return boolean
      */
-    boolean toggleHidden(Long id, Principal principal);
+    void toggleHiddenBoard(Long id, Principal principal);
 
     /**
      * 게시글 생성
