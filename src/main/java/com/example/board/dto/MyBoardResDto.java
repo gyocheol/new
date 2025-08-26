@@ -14,6 +14,7 @@ import java.util.Date;
 public class MyBoardResDto {
     private Long id;
     private String title;
+    private boolean hidden;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

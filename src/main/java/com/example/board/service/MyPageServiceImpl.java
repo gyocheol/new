@@ -30,6 +30,7 @@ public class MyPageServiceImpl implements MyPageService {
                 .map(board -> new MyBoardResDto(
                         board.getId(),
                         board.getTitle(),
+                        board.isHidden(),
                         board.getCreatedAt(),
                         board.getUpdatedAt()
                 ))
@@ -46,6 +47,7 @@ public class MyPageServiceImpl implements MyPageService {
                         comment.getId(),
                         comment.getContent(),
                         comment.getBoard(),
+                        comment.isHidden(),
                         comment.getCreatedAt(),
                         comment.getUpdatedAt()
                 ))

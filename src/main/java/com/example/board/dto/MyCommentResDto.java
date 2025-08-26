@@ -16,6 +16,7 @@ public class MyCommentResDto {
     private Long id;
     private String content;
     private Board board;
+    private boolean hidden;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

@@ -124,6 +124,11 @@
         .tab-content.active {
             display: block;
         }
+
+        .strikethrough {
+            text-decoration: line-through; /* 글자 가운데 줄 */
+            color: gray; /* 글자 색상 변경 */
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -150,7 +155,14 @@
             <tbody>
             <c:forEach var="board" items="${myBoardList}">
                 <tr>
-                    <td><a href="/board/view/${board.id}" class="title-link">${board.title}</a></td>
+                    <c:choose>
+                        <c:when test="${board.hidden}">
+                            <td class="strikethrough">${board.title}</td>
+                        </c:when>
+                        <c:otherwise>
+                            <td><a href="/board/view/${board.id}" class="title-link">${board.title}</a></td>
+                        </c:otherwise>
+                    </c:choose>
                     <td><fmt:formatDate value="${board.createdAtDate}" pattern="yy-MM-dd HH:mm" /></td>
                     <td><fmt:formatDate value="${board.updatedAtDate}" pattern="yy-MM-dd HH:mm" /></td>
                 </tr>
