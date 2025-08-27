@@ -84,12 +84,24 @@
 
         th, td {
             padding: 12px;
-            text-align: left;
             border-bottom: 1px solid #ccc;
         }
 
+        /* 헤더 전체 가운데 정렬 */
         th {
             background-color: var(--th-bg);
+            text-align: center;
+        }
+
+        /* 제목은 왼쪽 정렬 */
+        td:nth-child(1) {
+            text-align: left;
+        }
+
+        /* 작성일, 수정일은 가운데 정렬 */
+        td:nth-child(2),
+        td:nth-child(3) {
+            text-align: center;
         }
 
         .title-link {
@@ -142,7 +154,7 @@
         <table>
             <thead>
             <tr>
-                <th style="width:60%;">제목</th>
+                <th style="width:auto;">제목</th>
                 <th style="width:20%;">작성일</th>
                 <th style="width:20%;">수정일</th>
             </tr>
@@ -164,7 +176,7 @@
         <table>
             <thead>
             <tr>
-                <th style="width:60%;">댓글 내용</th>
+                <th style="width:auto;">댓글 내용</th>
                 <th style="width:20%;">작성일</th>
                 <th style="width:20%;">수정일</th>
             </tr>
