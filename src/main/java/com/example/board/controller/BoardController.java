@@ -51,7 +51,7 @@ public class BoardController {
      * @return home.jsp
      */
     @PostMapping("/board/delete/{id}")     // HTML <form> 태그는 delete method를 지원하지 않는다.
-    public String deleteBoard(@RequestParam Long id, Principal principal) {
+    public String deleteBoard(@PathVariable Long id, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }
@@ -96,7 +96,7 @@ public class BoardController {
      * @return
      */
     @PostMapping("/board/edit/{id}")
-    public String updateBoard(@RequestParam Long id, @Valid @ModelAttribute BoardUpdateReqDto dto, Principal principal) {
+    public String updateBoard(@PathVariable Long id, @Valid @ModelAttribute BoardUpdateReqDto dto, Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }

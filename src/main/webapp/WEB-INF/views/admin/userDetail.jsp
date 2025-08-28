@@ -84,12 +84,24 @@
 
         th, td {
             padding: 12px;
-            text-align: left;
             border-bottom: 1px solid #ccc;
         }
 
+        /* 헤더 전체 가운데 정렬 */
         th {
             background-color: var(--th-bg);
+            text-align: center;
+        }
+
+        /* 제목은 왼쪽 정렬 */
+        td:nth-child(1) {
+            text-align: left;
+        }
+
+        /* 작성일, 수정일은 가운데 정렬 */
+        td:nth-child(2),
+        td:nth-child(3) {
+            text-align: center;
         }
 
         .title-link {
@@ -124,16 +136,11 @@
         .tab-content.active {
             display: block;
         }
-
-        .strikethrough {
-            text-decoration: line-through; /* 글자 가운데 줄 */
-            color: gray; /* 글자 색상 변경 */
-        }
     </style>
 </head>
 <body data-theme="light">
 
-<h1>마이페이지</h1>
+<h1>${targetUsername}님의 마이페이지</h1>
 
 <div class="container">
     <!-- 탭 메뉴 -->
@@ -147,7 +154,7 @@
         <table>
             <thead>
             <tr>
-                <th style="width:60%;">제목</th>
+                <th style="width:auto;">제목</th>
                 <th style="width:20%;">작성일</th>
                 <th style="width:20%;">수정일</th>
             </tr>
@@ -155,14 +162,7 @@
             <tbody>
             <c:forEach var="board" items="${myBoardList}">
                 <tr>
-                    <c:choose>
-                        <c:when test="${board.hidden}">
-                            <td class="strikethrough">${board.title}</td>
-                        </c:when>
-                        <c:otherwise>
-                            <td><a href="/board/view/${board.id}" class="title-link">${board.title}</a></td>
-                        </c:otherwise>
-                    </c:choose>
+                    <td><a href="/board/view/${board.id}" class="title-link">${board.title}</a></td>
                     <td><fmt:formatDate value="${board.createdAtDate}" pattern="yy-MM-dd HH:mm" /></td>
                     <td><fmt:formatDate value="${board.updatedAtDate}" pattern="yy-MM-dd HH:mm" /></td>
                 </tr>
@@ -176,7 +176,7 @@
         <table>
             <thead>
             <tr>
-                <th style="width:60%;">댓글 내용</th>
+                <th style="width:auto;">댓글 내용</th>
                 <th style="width:20%;">작성일</th>
                 <th style="width:20%;">수정일</th>
             </tr>

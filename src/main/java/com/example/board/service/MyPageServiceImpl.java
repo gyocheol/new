@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,38 +24,39 @@ public class MyPageServiceImpl implements MyPageService {
     private final UserRepository userRepository;
 
     @Override
-    public void findAllMyBoard(Model model, Principal principal) {
-        List<Board> boards = boardRepository.findByAuthorOrderByCreatedAtAsc(getUser(principal));
+    public void findAllMyBoard(Model model, String username) {
+        List<Board> boards = boardRepository.findByAuthorOrderByCreatedAtAsc(getUser(username));
         List<MyBoardResDto> boardList = boards.stream()
                 .map(board -> new MyBoardResDto(
                         board.getId(),
                         board.getTitle(),
+                        board.isHidden(),
                         board.getCreatedAt(),
                         board.getUpdatedAt()
                 ))
-                .collect(Collectors.toList());
+                .toList();
         model.addAttribute("myBoardList", boardList);
     }
 
     @Override
-    public void findAllMyComment(Model model, Principal principal) {
-        List<Comment> comments = commentRepository.findByAuthorOrderByCreatedAtAsc(getUser(principal));
+    public void findAllMyComment(Model model, String username) {
+        List<Comment> comments = commentRepository.findByAuthorOrderByCreatedAtAsc(getUser(username));
 
         List<MyCommentResDto> commentList = comments.stream()
                 .map(comment -> new MyCommentResDto(
                         comment.getId(),
                         comment.getContent(),
                         comment.getBoard(),
+                        comment.isHidden(),
                         comment.getCreatedAt(),
                         comment.getUpdatedAt()
                 ))
-                .collect(Collectors.toList());
+                .toList();
         model.addAttribute("myCommentList", commentList);
     }
 
-    private User getUser(Principal principal) {
-        User user = userRepository.findByUsername(principal.getName()).orElseThrow();
-
+    private User getUser(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow();
         return user;
     }
 }

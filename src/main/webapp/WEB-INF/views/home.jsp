@@ -131,6 +131,42 @@
             height: auto;
         }
 
+        .hidden-board {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+
+        .admin-action-cell {
+            text-align: center;   /* 셀 가운데 정렬 */
+        }
+
+        .admin-action-cell form {
+            display: inline-block; /* form을 가로로 배치 */
+            margin: 0 4px;         /* 버튼 사이 간격 */
+        }
+
+        .admin-action-wrapper {
+            display: flex;
+            justify-content: center; /* 버튼들을 가운데 정렬 */
+            gap: 6px;                /* 버튼 간격 */
+        }
+
+        .act-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;   /* 줄바꿈 방지 */
+            min-width: 60px;       /* 버튼 최소 너비 확보 */
+            text-align: center;    /* 글자 가운데 정렬 */
+        }
+
+        .act-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -141,8 +177,16 @@
         <c:choose>
             <c:when test="${not empty username}">
                 <div class="user-info">
-                    <span>안녕하세요, ${username}님!</span>
-                    <a href="/mypage">내 정보</a>
+                    <c:choose>
+                        <c:when test="${role == 'ROLE_ADMIN'}">
+                            <span>안녕하세요, 관리자님!</span>
+                            <a href="/admin">관리자 탭</a>
+                        </c:when>
+                        <c:otherwise>
+                            <span>안녕하세요, ${username}님!</span>
+                            <a href="/mypage">내 정보</a>
+                        </c:otherwise>
+                    </c:choose>
                     <a href="/logout">로그아웃</a>
                 </div>
             </c:when>
@@ -160,14 +204,17 @@
     <table>
         <thead>
             <tr>
-                <th style="width:60%;">제목</th>
-                <th style="width:20%;">작성자</th>
+                <th style="width:auto;">제목</th>
+                <th style="width:10%;">작성자</th>
                 <th style="width:20%;">작성일</th>
+                <c:if test="${role == 'ROLE_ADMIN'}">
+                    <th style="width:20%;">관리</th>
+                </c:if>
             </tr>
         </thead>
         <tbody>
             <c:forEach var="board" items="${boardList}">
-                <tr>
+                <tr id="board-row-${board.id}" class="${board.hidden ? 'hidden-board' : ''}">
                     <td class="title-cell">
                         <a href="/board/view/${board.id}" style="text-decoration:none; color:#007bff;">
                             ${board.title}
@@ -177,6 +224,16 @@
                     <td class="date-cell">
                         <fmt:formatDate value="${board.createdAtDate}" pattern="yy-MM-dd HH:mm"/>
                     </td>
+
+                    <c:if test="${role == 'ROLE_ADMIN'}">
+                        <td class="admin-action-cell">
+                            <form action="/admin/toggle-hidden/${board.id}" method="post" style="display:inline;">
+                                <button type="submit" class="act-btn">
+                                    ${board.hidden ? '해제' : '숨김'}
+                                </button>
+                            </form>
+                        </td>
+                    </c:if>
                 </tr>
             </c:forEach>
         </tbody>
@@ -187,6 +244,5 @@
 <c:if test="${not empty username}">
     <a href="/board/write-form" class="fab">게시글 작성</a>
 </c:if>
-
 </body>
 </html>

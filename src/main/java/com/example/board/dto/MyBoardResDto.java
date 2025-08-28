@@ -9,19 +9,14 @@ import java.time.ZoneId;
 import java.util.Date;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class MyBoardResDto {
     private Long id;
     private String title;
+    private boolean hidden;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    @Builder
-    public MyBoardResDto(String title, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.title = title;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
     public Date getCreatedAtDate() {
         return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());

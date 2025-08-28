@@ -6,6 +6,7 @@ import com.example.board.dto.CommentResDto;
 import com.example.board.dto.CommentUpdateReqDto;
 import com.example.board.entity.Board;
 import com.example.board.entity.Comment;
+import com.example.board.entity.Role;
 import com.example.board.entity.User;
 import com.example.board.repository.BoardRepository;
 import com.example.board.repository.CommentRepository;
@@ -17,7 +18,6 @@ import org.springframework.ui.Model;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
                         comment.getCreatedAt(),
                         comment.getUpdatedAt()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -92,11 +92,23 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
     }
 
+    @Override
+    public void toggleHiddenComment(Long commentId, Principal principal) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
+        if (principal != null) {
+            User user = userRepository.findByUsername(principal.getName()).orElseThrow();
+            if (user.getRole().equals(Role.ROLE_ADMIN)) {
+                comment.setHidden(!comment.isHidden());
+                commentRepository.save(comment);
+            }
+        }
+    }
+
     /**
      * 자신의 댓글 유효성 확인
      * @param commentId
      * @param principal
-     * @return
+     * @return comment
      */
     private Comment validationComment(Long commentId, Principal principal) {
         Comment comment = commentRepository.findById(commentId)

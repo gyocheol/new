@@ -19,8 +19,8 @@ public class MyPageController {
     @GetMapping
     public String getMyPage(Model model,
                             Principal principal) {
-        myPageService.findAllMyBoard(model, principal);
-        myPageService.findAllMyComment(model, principal);
+        myPageService.findAllMyBoard(model, principal.getName());
+        myPageService.findAllMyComment(model, principal.getName());
         return "auth/mypage";
     }
 }
