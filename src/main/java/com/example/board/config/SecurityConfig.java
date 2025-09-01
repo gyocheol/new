@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((request) ->
                         request.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()      // 포워딩 허용!! 무한 리다이렉트 오류 해결 코드
-                        .requestMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/board/view/*").permitAll()
+                        .requestMatchers("/", "/home", "/register", "/login", "/static/css/**", "/js/**", "/board/view/*").permitAll()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()       // 정적 리소스 접근 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
