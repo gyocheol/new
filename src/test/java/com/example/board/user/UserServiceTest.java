@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 /**
@@ -53,5 +54,36 @@ public class UserServiceTest {
         assertThat(savedUser.getUsername()).isEqualTo("testuser1");
         assertThat(savedUser.getPassword()).isEqualTo("encoded_pw");
         assertThat(savedUser.getRole()).isEqualTo(Role.ROLE_USER);
+    }
+
+    @Test
+    void 회원가입_실패_비밀번호불일치() {
+        UserRegisterDto dto = new UserRegisterDto();
+        dto.setUsername("testuser1");
+        dto.setPassword("1234");
+        dto.setConfirmPassword("5678");
+
+        assertThatThrownBy(() -> userService.register(dto))                                 // 실행 시 예외가 던져지는지 감시 / () -> ... 형태의 람다는 실행을 지연시키는 용도
+                .isInstanceOf(IllegalArgumentException.class)                               // IllegalArgumentException 은 자바 표준 예외 클래스, 메서드에 전달된 인자의 값이 잘못되었을 때 던지는 예외
+                .hasMessage("비밀번호가 일치하지 않습니다.");
+    }
+
+    @Test
+    void 회원가입_실패_중복아이디() {
+        UserRegisterDto dto = new UserRegisterDto();
+        dto.setUsername("testuser1");
+        dto.setPassword("1234");
+        dto.setConfirmPassword("1234");
+
+        when(userRepository.findByUsername("testuser1"))
+                .thenReturn(Optional.of(User.builder()
+                        .username("testuser1")
+                        .password("encoded_pw")
+                        .role(Role.ROLE_USER)
+                        .build()));
+
+        assertThatThrownBy(() -> userService.register(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 존재하는 아이디입니다.");
     }
 }
