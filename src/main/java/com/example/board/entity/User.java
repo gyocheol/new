@@ -1,6 +1,7 @@
 package com.example.board.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,8 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
     @Id
@@ -24,14 +27,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany
+    @Builder.Default
     private List<Board> boards = new ArrayList<>();
-
-    @Builder
-    public User(String username, String password, Role role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
 
     // UserDetails 구현
     @Override public Collection<? extends GrantedAuthority> getAuthorities() {
