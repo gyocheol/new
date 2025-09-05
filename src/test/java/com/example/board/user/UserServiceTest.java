@@ -26,7 +26,7 @@ public class UserServiceTest {
     private PasswordEncoder passwordEncoder;
     private UserService userService;
 
-    @BeforeEach
+    @BeforeEach                                                                 // JUnit5에서 제공하는 어노테이션으로, 각 테스트 메서드 실행 전에 항상 먼저 실행되는 메서드를 지정하는 것, 테스트의 독립성을 보장한다.
     void setUp() {
         userRepository = mock(UserRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
