@@ -1,18 +1,25 @@
 package com.example.board.board;
 
+import com.example.board.dto.BoardUpdateReqDto;
 import com.example.board.dto.BoardWriteDto;
+import com.example.board.dto.CommentResDto;
 import com.example.board.entity.Board;
+import com.example.board.entity.Comment;
 import com.example.board.entity.Role;
 import com.example.board.entity.User;
 import com.example.board.repository.BoardRepository;
 import com.example.board.repository.CommentRepository;
 import com.example.board.repository.UserRepository;
 import com.example.board.service.BoardServiceImpl;
+import com.example.board.service.CommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.ui.ConcurrentModel;
+import org.springframework.ui.Model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -27,6 +34,8 @@ public class BoardServiceTest {
     private UserRepository userRepository;
     @Mock
     private CommentRepository commentRepository;
+    @Mock
+    private CommentService commentService;
 
     @InjectMocks                                                // 테스트할 실제 객체를 생성하고 여기에 @Mock로 만든 가짜 객체들을 자동으로 주입, Spring의 @Autowired와 비슷한 역할 : 2. 테스트할 클래스 생성 + 1번 가짜 의존성 자동 주입
     private BoardServiceImpl boardService;
@@ -86,5 +95,59 @@ public class BoardServiceTest {
         assertThat(savedBoard.getContent()).isEqualTo(dto.getContent());
         assertThat(savedBoard.getAuthor()).isEqualTo(user);
         assertThat(savedBoard.getCreatedAt()).isNotNull();
+    }
+
+    @Test
+    void update_정상수정() {
+        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
+        BoardUpdateReqDto dto = new BoardUpdateReqDto();
+        dto.setTitle("새 제목");
+        dto.setContent("새 내용");
+
+        boardService.updateBoard(1L, "testuser", dto);
+
+        assertThat(board.getTitle()).isEqualTo("새 제목");
+        assertThat(board.getContent()).isEqualTo("새 내용");
+        verify(boardRepository).save(board);                            // verify(boardRepository.save(board)); 는 boardRepository.save(board)의 결과를 던지기 기대한 mock 객체가 아니라 오류 발생 따라서 왼쪽의 코드와 같이 mock 객체를 던지고 뒤의 메서드가 호출 되는지 확인해야한다.
+    }
+
+    @Test
+    void getBoard_정상조회() {
+        // 1. 의존 모킹 : 게시글 조회
+        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
+
+        // 2. 의존 모킹 : 댓글 조회
+        CommentResDto commentDto = CommentResDto.builder()
+                .content("댓글 내용")
+                .author("댓글 작성자")
+                .hidden(false)
+                .parent(null)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null)
+                .build();
+        when(commentService.findAllComment(1L)).thenReturn(List.of(commentDto));
+
+        // 3. 모델 생성 : 서비스가 담을 데이터를 저장할 model 생성
+        Model model = new ConcurrentModel();
+
+        // 4. 실행 : 서비스 메서드 호출
+        boardService.getBoard(1L, model, () -> "testUser");
+
+        // 5. 검증
+        assertThat(model.getAttribute("board")).isEqualTo(board);
+        assertThat(model.getAttribute("comments")).isInstanceOf(List.class);
+        Object commentsObj = model.getAttribute("comments");
+        assertThat(commentsObj).isInstanceOf(List.class);
+
+        // Object -> List<CommentResDto> 안전하게 변환
+        List<?> rawComments = (List<?>) commentsObj;
+        List<CommentResDto> comments = rawComments.stream()
+                .map(o -> {
+                    assertThat(o).isInstanceOf(CommentResDto.class); // 개별 요소 타입 검증
+                    return (CommentResDto) o;
+                })
+                .toList();
+        assertThat(comments).contains(commentDto);
+        assertThat(model.getAttribute("loginUsername")).isEqualTo("testUser");
     }
 }
