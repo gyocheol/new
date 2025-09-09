@@ -4,11 +4,9 @@ import com.example.board.dto.BoardUpdateReqDto;
 import com.example.board.dto.BoardWriteDto;
 import com.example.board.dto.CommentResDto;
 import com.example.board.entity.Board;
-import com.example.board.entity.Comment;
 import com.example.board.entity.Role;
 import com.example.board.entity.User;
 import com.example.board.repository.BoardRepository;
-import com.example.board.repository.CommentRepository;
 import com.example.board.repository.UserRepository;
 import com.example.board.service.BoardServiceImpl;
 import com.example.board.service.CommentService;
@@ -32,8 +30,6 @@ public class BoardServiceTest {
     private BoardRepository boardRepository;
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private CommentRepository commentRepository;
     @Mock
     private CommentService commentService;
 
