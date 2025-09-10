@@ -21,6 +21,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -31,10 +32,13 @@ public class CommentServiceTest {
     private CommentRepository commentRepository;
     @Mock
     private BoardRepository boardRepository;
+    @Mock
+    private Principal principal;
 
     private CommentServiceImpl commentService;
     private User user;
     private Board board;
+    private Comment comment;
 
     @BeforeEach
     void setUp() {
@@ -78,5 +82,39 @@ public class CommentServiceTest {
         assertThat(savedComment.getBoard()).isEqualTo(board);
         assertThat(savedComment.getAuthor()).isEqualTo(user);
         assertThat(savedComment.getParent()).isNull();
+    }
+
+    @Test
+    void deleteComment_정상삭제() {
+        comment = new Comment();
+        comment.setId(100L);
+        comment.setContent("기존 댓글");
+        comment.setAuthor(user);
+
+        when(principal.getName()).thenReturn("testuser");
+        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+
+        commentService.deleteComment(comment.getId(), principal);
+        verify(commentRepository).delete(comment);
+    }
+
+    @Test
+    void deleteComment_자신의_글이_아닐때() {
+        comment = new Comment();
+        comment.setId(100L);
+        comment.setContent("기존 댓글");
+        comment.setAuthor(user);
+
+        User otherUser = new User();
+        otherUser.setId(2L);
+        otherUser.setUsername("otherUser");
+        otherUser.setRole(Role.ROLE_USER);
+
+        comment.setAuthor(otherUser);
+        when(commentRepository.findById(comment.getId())).thenReturn(Optional.of(comment));
+
+        assertThatThrownBy(() -> commentService.deleteComment(comment.getId(), principal))
+                .isInstanceOf(RuntimeException.class); // 실제 예외 타입으로 변경
+        verify(commentRepository, never()).delete(any());
     }
 }
