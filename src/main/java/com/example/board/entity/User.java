@@ -1,9 +1,7 @@
 package com.example.board.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +12,9 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
     @Id
@@ -24,14 +25,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany
+    @Builder.Default
     private List<Board> boards = new ArrayList<>();
-
-    @Builder
-    public User(String username, String password, Role role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
 
     // UserDetails 구현
     @Override public Collection<? extends GrantedAuthority> getAuthorities() {
